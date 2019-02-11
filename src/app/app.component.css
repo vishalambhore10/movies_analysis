@@ -1,0 +1,17 @@
+
+.bgdark{
+    background-color: rgb(2, 2, 2);
+    color: white
+}
+.page-item{
+    color: rgb(0, 0, 0)!important
+}
+td{
+    word-break:break-all;
+}
+input{
+    width: 30%;
+    float: left;
+    display: inline!important;
+
+}

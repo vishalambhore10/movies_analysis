@@ -1,21 +1,91 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<div class="container-fluid" [ngClass]='multiclass'>
 
-<router-outlet></router-outlet>
+  <div class="col">
+      <h3 class="display-4 text-center">Movie Analysis</h3>
+      <button class="btn btn-primary mb-2 mx-3" 
+            (click)="theme('dark')">Dark</button>
+      <button class="btn btn-primary mb-2" 
+      (click)="theme('light')">Light</button>
+      <nav>
+
+        <input class="form-control" placeholder="search" 
+                [(ngModel)]='search'(input)="onSearchChange($event.target.value)">
+
+
+          <ul class="pagination pg-blue justify-content-end">
+              <li class="page-item" [ngClass]="{'disabled':p <= 6 }">
+                  <span class="page-link"(click)="front()"><<</span>
+                </li>
+              <li class="page-item" [ngClass]="{'disabled':p ==1  }">
+                  <span class="page-link"(click)="firstpage()">First</span>
+                </li>
+            <li class="page-item " [ngClass]="{'disabled':p ==1 }">
+              <span class="page-link"(click)="prepage()">Previous</span>
+            </li>
+           <ng-container *ngFor='let count of counter(5);let i=index'>
+              <li class="page-item "  (click)="page(p+i-2)" [ngClass]="{'active':p == (p+i-2) }">
+                <a class="page-link" *ngIf='(p+i-2)>=1 && (p+i-2)<=(totalIndex/10) ;else dash'>{{p+i-2}}</a>
+                <ng-template #dash>
+                  <a class="page-link disabled">-</a>
+                </ng-template>
+              </li>
+                </ng-container>
+            <li class="page-item" [ngClass]="{'disabled':p == 49 }">
+              <span class="page-link"(click)="nextpage()" >Next</span>
+            </li>
+            <li class="page-item"  [ngClass]="{'disabled':p == 49 }">
+                <span class="page-link"(click)="lastpage()">Last</span>
+              </li>
+              <li class="page-item" [ngClass]="{'disabled':p >= 45 }" >
+                  <span class="page-link"(click)="back()">>></span>
+                </li>
+          </ul>
+        </nav>
+
+  </div>
+  <div class="row">
+    <div class="col-md-12 p-0 m-0">
+          <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>idx</th>
+                  <th (click)='sortname()'>movie</th>
+                  <th>director</th>
+                  <th>actor_1_name</th>
+                  <th>actor_2_name</th>
+                  <th>genres</th>
+                  <th>language</th>
+                  <th>country</th>
+                  <th>content_rating</th>
+                  <th  (click)="mysort()">budget
+                  </th>
+                  <th (click)="sortyear()">title_year</th>
+                  <th>plot_keywords</th>
+                  <th>imdb_link</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor='let movie of whicharr;let i=index'>
+                    <ng-template [ngIf]="i >= firstItemIndex && i<lastItemIndex">
+                      <td scope="row">{{(i+1)}}</td>
+                      <td scope="row">{{movie.movie_title}}</td>
+                      <td scope="row">{{movie.director_name}}</td>
+                      <td scope="row">{{movie.actor_1_name}}</td>
+                      <td scope="row">{{movie.actor_2_name}}</td>
+                      <td scope="row">{{movie.genres}}</td>
+                      <td scope="row">{{movie.language}}</td>
+                      <td scope="row">{{movie.country}}</td>
+                      <td scope="row">{{movie.content_rating}}</td>
+                      <td scope="row">{{movie.budget}}</td>
+                      <td scope="row">{{movie.title_year}}</td>
+                      <td scope="row">{{movie.plot_keywords}}</td>
+                      <td scope="row"><a href="{{movie.movie_imdb_link}}" target="_blank">{{movie.movie_imdb_link}}</a></td>
+                   </ng-template>
+                </tr>
+              </tbody>
+             </table>
+    </div>
+  </div>
+  <div class="row text-center">
+        </div>
+</div>
